@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Victor Berrios — Computer Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0c;
+      --surface: #111115;
+      --border: #1e1e26;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --accent: #5b8af0;
+      --accent2: #a78bfa;
+      --green: #34d399;
+      --mono: 'DM Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,12,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: var(--sans);
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(91,138,240,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(91,138,240,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(91,138,240,0.12) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      pointer-events: none;
+    }
+
+    .hero-glow2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%);
+      bottom: 0; left: 10%;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; max-width: 800px; }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.1s;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-family: var(--sans);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.2s;
+    }
+
+    h1 .name-accent { color: var(--accent); }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.35s;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.45s;
+    }
+
+    .badge {
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      background: var(--surface);
+    }
+
+    .badge.highlight {
+      border-color: rgba(91,138,240,0.4);
+      color: var(--accent);
+      background: rgba(91,138,240,0.06);
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.55s;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.6rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #4a78e0;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: var(--muted);
+      transform: translateY(-1px);
+    }
+
+    .hero-stats {
+      position: absolute;
+      right: 0; top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      opacity: 0;
+      animation: fadeLeft 0.8s ease forwards 0.7s;
+    }
+
+    .stat {
+      text-align: right;
+    }
+
+    .stat-num {
+      font-family: var(--sans);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .stat-num span { color: var(--accent); }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 6rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-num {
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+    }
+
+    .section-title {
+      font-family: var(--sans);
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 1rem;
+      line-height: 1.85;
+    }
+
+    .about-text p strong { color: var(--text); }
+
+    .about-aside {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+
+    .info-row .label { color: var(--muted); }
+    .info-row .value { color: var(--text); text-align: right; }
+    .info-row .value a { color: var(--accent); text-decoration: none; }
+    .info-row .value a:hover { text-decoration: underline; }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .skill-card:hover {
+      border-color: rgba(91,138,240,0.3);
+      transform: translateY(-2px);
+    }
+
+    .skill-card-title {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text);
+    }
+
+    /* ── PROJECTS ── */
+    .projects-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .project-card:hover {
+      border-color: rgba(91,138,240,0.3);
+      transform: translateX(4px);
+    }
+
+    .project-card:hover::before { opacity: 1; }
+
+    .project-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .project-title {
+      font-family: var(--sans);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .project-type {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .type-capstone {
+      background: rgba(167,139,250,0.1);
+      color: var(--accent2);
+      border: 1px solid rgba(167,139,250,0.2);
+    }
+
+    .type-course {
+      background: rgba(91,138,240,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(91,138,240,0.2);
+    }
+
+    .type-personal {
+      background: rgba(52,211,153,0.1);
+      color: var(--green);
+      border: 1px solid rgba(52,211,153,0.2);
+    }
+
+    .project-desc {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tech-tag {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 2px;
+    }
+
+    .project-date {
+      font-size: 0.75rem;
+      color: var(--muted);
+      white-space: nowrap;
+      margin-top: 0.25rem;
+    }
+
+    /* ── CONTACT ── */
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-text p {
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 1rem;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: rgba(91,138,240,0.4);
+      color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    .contact-icon {
+      width: 36px; height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .contact-icon svg {
+      width: 16px; height: 16px;
+      fill: currentColor;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeLeft {
+      from { opacity: 0; transform: translateX(20px) translateY(-50%); }
+      to   { opacity: 1; transform: translateX(0) translateY(-50%); }
+    }
+
+    /* scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { padding: 7rem 1.5rem 3rem; }
+      .hero-stats { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .about-grid, .contact-wrapper { grid-template-columns: 1fr; gap: 2rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">VB<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" style="max-width:100%; padding-left:4rem; padding-right:4rem;">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+
+    <div class="hero-content">
+      <div class="hero-tag">Available for opportunities · May 2026</div>
+      <h1>Victor<br><span class="name-accent">Berrios</span></h1>
+      <p class="hero-desc">
+        Computer Engineering student at the University of Arkansas with a Cybersecurity concentration.
+        Building secure systems, full-stack applications, and embedded hardware — graduating May 2026.
+      </p>
+
+      <div class="hero-badges">
+        <span class="badge highlight">Senior of Significance 2026</span>
+        <span class="badge">GPA 3.532</span>
+        <span class="badge">Google Cybersecurity Cert</span>
+        <span class="badge">Math Minor</span>
+      </div>
+
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View Projects →</a>
+        <a href="https://www.linkedin.com/in/victor-berrios-engineering/" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+        <a href="mailto:berrios@uark.edu" class="btn btn-ghost">Email Me</a>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">100<span>+</span></div>
+        <div class="stat-label">Campus Tours Led</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">250<span>+</span></div>
+        <div class="stat-label">Hours of Curriculum</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3.53</div>
+        <div class="stat-label">GPA</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-header reveal">
+      <span class="section-num">01 /</span>
+      <h2 class="section-title">About Me</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I'm a <strong>Computer Engineering student</strong> at the University of Arkansas (graduating May 2026)
+          with a concentration in Cybersecurity and a Math minor. I was recently recognized as a
+          <strong>Senior of Significance</strong> — an honor awarded to standout graduating seniors.
+        </p>
+        <p>
+          My work spans full-stack web development, embedded systems design in Verilog, and applied
+          cybersecurity. My senior capstone, <strong>PhishWise</strong>, is a phishing-awareness training
+          platform I'm currently building to help users recognize social engineering attacks.
+        </p>
+        <p>
+          Beyond the classroom, I co-founded the <strong>DogsToHogs mentorship program</strong> for Springdale
+          High School students, serve as a Senior Student Ambassador delivering engineering tours,
+          and lead the Summer Camp Committee building 250+ hours of STEM curriculum.
+        </p>
+        <p>
+          I'm a proud first-gen college student, fluent in English with novice Spanish, and passionate
+          about lifting others into STEM through mentorship and outreach.
+        </p>
+      </div>
+
+      <div class="about-aside reveal">
+        <div class="info-row">
+          <span class="label">University</span>
+          <span class="value">University of Arkansas</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Degree</span>
+          <span class="value">B.S. Computer Engineering</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Concentration</span>
+          <span class="value">Cybersecurity</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Minor</span>
+          <span class="value">Mathematics</span>
+        </div>
+        <div class="info-row">
+          <span class="label">GPA</span>
+          <span class="value">3.532</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Graduation</span>
+          <span class="value">May 2026</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Location</span>
+          <span class="value">Fayetteville, AR</span>
+        </div>
+        <div class="info-row">
+          <span class="label">LinkedIn</span>
+          <span class="value"><a href="https://www.linkedin.com/in/victor-berrios-engineering/" target="_blank">victor-berrios-engineering ↗</a></span>
+        </div>
+        <div class="info-row">
+          <span class="label">Email</span>
+          <span class="value"><a href="mailto:berrios@uark.edu">berrios@uark.edu</a></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-header reveal">
+      <span class="section-num">02 /</span>
+      <h2 class="section-title">Skills</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-card-title">Languages</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">C</span>
+          <span class="skill-tag">Java</span>
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">Verilog</span>
+          <span class="skill-tag">VHDL</span>
+        </div>
+      </div>
+
+      <div class="skill-card reveal">
+        <div class="skill-card-title">Frameworks & Tools</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Django</span>
+          <span class="skill-tag">PostgreSQL</span>
+          <span class="skill-tag">MySQL</span>
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">ModelSim</span>
+          <span class="skill-tag">Synopsys Design Vision</span>
+          <span class="skill-tag">Power BI</span>
+          <span class="skill-tag">SolidWorks</span>
+        </div>
+      </div>
+
+      <div class="skill-card reveal">
+        <div class="skill-card-title">Cybersecurity</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Cryptographic Primitives</span>
+          <span class="skill-tag">PKI / TLS</span>
+          <span class="skill-tag">Authentication</span>
+          <span class="skill-tag">Firewall Config</span>
+          <span class="skill-tag">Phishing Awareness</span>
+          <span class="skill-tag">Network Security</span>
+        </div>
+      </div>
+
+      <div class="skill-card reveal">
+        <div class="skill-card-title">Systems & Architecture</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Full-Stack Dev</span>
+          <span class="skill-tag">Embedded Systems</span>
+          <span class="skill-tag">Digital Systems Design</span>
+          <span class="skill-tag">TCP / UDP Networking</span>
+          <span class="skill-tag">Agile / Scrum</span>
+          <span class="skill-tag">Database Design</span>
+        </div>
+      </div>
+
+      <div class="skill-card reveal">
+        <div class="skill-card-title">Platforms</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Windows</span>
+          <span class="skill-tag">macOS</span>
+          <span class="skill-tag">Linux</span>
+          <span class="skill-tag">Microsoft Office</span>
+        </div>
+      </div>
+
+      <div class="skill-card reveal">
+        <div class="skill-card-title">Certifications</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Google Cybersecurity Professional</span>
+          <span class="skill-tag">PLTW Certified</span>
+          <span class="skill-tag">CPR Certified</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-header reveal">
+      <span class="section-num">03 /</span>
+      <h2 class="section-title">Projects</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="projects-list">
+
+      <div class="project-card reveal">
+        <div>
+          <div class="project-meta">
+            <span class="project-title">PhishWise Scam Trainer</span>
+            <span class="project-type type-capstone">Capstone</span>
+          </div>
+          <p class="project-desc">
+            A web-based phishing awareness platform that delivers simulated phishing emails and evaluates
+            user responses. Designed adaptive, feedback-driven learning modules to train users in recognizing
+            social engineering indicators. Built with modular, extensible components supporting user tracking,
+            session management, and future expansion.
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">Cybersecurity</span>
+            <span class="tech-tag">Web Dev</span>
+            <span class="tech-tag">Software Engineering</span>
+          </div>
+        </div>
+        <div class="project-date">Summer 2025 – Present</div>
+      </div>
+
+      <div class="project-card reveal">
+        <div>
+          <div class="project-meta">
+            <span class="project-title">Laser Tag Game Simulation</span>
+            <span class="project-type type-course">Course Project</span>
+          </div>
+          <p class="project-desc">
+            Full-stack multiplayer simulation with real-time client–server communication over UDP.
+            Implemented real-time score tracking, game timers, team assignments, and a retro arcade-themed
+            interface with audio. Collaborated in a 5-sprint Agile workflow using Trello and Slack.
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">Django</span>
+            <span class="tech-tag">PostgreSQL</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">HTML/CSS</span>
+            <span class="tech-tag">UDP</span>
+            <span class="tech-tag">AJAX</span>
+          </div>
+        </div>
+        <div class="project-date">Fall 2024</div>
+      </div>
+
+      <div class="project-card reveal">
+        <div>
+          <div class="project-meta">
+            <span class="project-title">16-bit Microcontroller Design</span>
+            <span class="project-type type-course">Course Project</span>
+          </div>
+          <p class="project-desc">
+            Designed a 16-bit microcontroller from scratch in Verilog with an ALU supporting arithmetic and
+            logic instructions, a Program Counter, FSM control logic, Instruction Register, Memory Address/Data
+            Registers, and I/O ports. Verified through ModelSim simulation and Synopsys Design Vision synthesis
+            with timing constraints.
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">Verilog</span>
+            <span class="tech-tag">ModelSim</span>
+            <span class="tech-tag">Synopsys Design Vision</span>
+            <span class="tech-tag">Digital Logic</span>
+            <span class="tech-tag">FSM</span>
+          </div>
+        </div>
+        <div class="project-date">Fall 2024</div>
+      </div>
+
+      <div class="project-card reveal">
+        <div>
+          <div class="project-meta">
+            <span class="project-title">Career Fair Analytics Dashboard</span>
+            <span class="project-type type-personal">Personal</span>
+          </div>
+          <p class="project-desc">
+            Designed a relational MySQL database and built an interactive Power BI dashboard to analyze student
+            majors, company industries, and hiring trends from simulated career fair data. Applied KPIs, calculated
+            measures, and dynamic filters for data-driven insights.
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">Power BI</span>
+            <span class="tech-tag">MySQL</span>
+            <span class="tech-tag">Data Modeling</span>
+            <span class="tech-tag">Analytics</span>
+          </div>
+        </div>
+        <div class="project-date">Summer 2025</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-header reveal">
+      <span class="section-num">04 /</span>
+      <h2 class="section-title">Contact</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="contact-wrapper">
+      <div class="contact-text reveal">
+        <p>
+          I'm graduating in May 2026 and actively exploring full-time opportunities in software engineering,
+          cybersecurity, and computer engineering roles.
+        </p>
+        <p>
+          If you're interested in working together, have a question, or just want to connect — feel free to
+          reach out through any of the channels below.
+        </p>
+      </div>
+
+      <div class="contact-links reveal">
+        <a href="mailto:berrios@uark.edu" class="contact-link">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </span>
+          berrios@uark.edu
+        </a>
+
+        <a href="https://www.linkedin.com/in/victor-berrios-engineering/" target="_blank" class="contact-link">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+          </span>
+          linkedin.com/in/victor-berrios-engineering
+        </a>
+
+        <a href="tel:4797703702" class="contact-link">
+          <span class="contact-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </span>
+          (479) 770-3702
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Victor Berrios</span>
+    <span>Computer Engineering · University of Arkansas</span>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 60);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
