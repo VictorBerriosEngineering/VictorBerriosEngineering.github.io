@@ -312,6 +312,28 @@
       align-items: start;
     }
 
+    .headshot-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .headshot {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid var(--border);
+      outline: 4px solid rgba(157,34,53,0.2);
+      outline-offset: 3px;
+      transition: outline-color 0.3s;
+    }
+
+    .headshot:hover {
+      outline-color: rgba(157,34,53,0.5);
+    }
+
     .about-text p {
       color: var(--muted);
       margin-bottom: 1rem;
@@ -684,6 +706,9 @@
       </div>
 
       <div class="about-aside reveal">
+        <div class="headshot-wrap">
+          <img src="2026MarchHeadshot.png" alt="Victor Berrios" class="headshot" />
+        </div>
         <div class="info-row">
           <span class="label">University</span>
           <span class="value">University of Arkansas</span>
