@@ -807,6 +807,103 @@
 
       footer { flex-direction: column; gap: 0.5rem; text-align: center; }
     }
+
+    /* ── HOMELAB FEATURED CARD ── */
+    .project-card-featured {
+      border-color: rgba(52,211,153,0.25);
+      background: linear-gradient(160deg, var(--surface) 0%, rgba(52,211,153,0.03) 100%);
+      border-top: 2px solid rgba(52,211,153,0.4);
+    }
+
+    .project-card-featured::before { background: var(--green); }
+
+    .project-card-featured:hover {
+      border-color: rgba(52,211,153,0.45);
+      transform: translateX(4px);
+    }
+
+    .type-homelab {
+      background: rgba(52,211,153,0.1);
+      color: var(--green);
+      border: 1px solid rgba(52,211,153,0.25);
+    }
+
+    .homelab-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: none;
+      border: 1px solid rgba(52,211,153,0.25);
+      border-radius: 2px;
+      color: var(--green);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      padding: 0.35rem 0.85rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: all 0.2s;
+    }
+
+    .homelab-toggle:hover {
+      background: rgba(52,211,153,0.08);
+      border-color: rgba(52,211,153,0.5);
+    }
+
+    .homelab-expanded {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+
+    .homelab-section { margin-bottom: 1.5rem; }
+
+    .homelab-section-title {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 0.75rem;
+    }
+
+    .homelab-section p {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.8;
+      margin-bottom: 0.6rem;
+    }
+
+    .homelab-section p strong { color: var(--text); }
+
+    .homelab-story {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid rgba(52,211,153,0.35);
+      border-radius: 2px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .homelab-story-label {
+      font-size: 0.78rem;
+      color: var(--text);
+      font-weight: 500;
+      margin-bottom: 0.3rem;
+    }
+
+    .homelab-story p { margin: 0; font-size: 0.85rem; }
+
+    .homelab-screenshots {
+      border: 1px dashed rgba(52,211,153,0.2);
+      border-radius: 3px;
+      padding: 1.25rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+    }
   </style>
 </head>
 <body>
@@ -894,9 +991,6 @@
       </div>
 
       <div class="about-aside reveal">
-        <div class="headshot-wrap">
-          <img src="2026MarchHeadshot.png" alt="Victor Berrios" class="headshot" />
-        </div>
         <div class="info-row">
           <span class="label">University</span>
           <span class="value">University of Arkansas</span>
@@ -1008,6 +1102,7 @@
         <div class="skill-card-title">Certifications</div>
         <div class="skill-tags">
           <span class="skill-tag">Google Cybersecurity Professional</span>
+          <span class="skill-tag">CompTIA Security+ (In Progress)</span>
           <span class="skill-tag">PLTW Certified</span>
           <span class="skill-tag">CPR Certified</span>
         </div>
@@ -1042,8 +1137,40 @@
             <span class="tech-tag">Web Dev</span>
             <span class="tech-tag">Software Engineering</span>
           </div>
+          <div style="margin-top:1rem;">
+            <a href="https://phishwise.org" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.8rem;">
+              Live Site ↗
+            </a>
+          </div>
         </div>
         <div class="project-date">Summer 2025 – Present</div>
+      </div>
+
+      <!-- HOMELAB - FEATURED EXPANDABLE CARD -->
+      <div class="project-card project-card-featured reveal">
+        <div>
+          <div class="project-meta">
+            <span class="project-title">Secure Linux Service Homelab</span>
+            <span class="project-type type-homelab">Infrastructure</span>
+            <span class="project-type type-personal">Personal</span>
+          </div>
+          <p class="project-desc">
+            A hardened Ubuntu Server environment built from scratch — SSH key auth, UFW firewall, Fail2Ban,
+            NGINX over self-signed TLS, Docker, and Ansible. The setup itself was straightforward.
+            The interesting part was what broke along the way.
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">Ubuntu 24.04 LTS</span>
+            <span class="tech-tag">NGINX</span>
+            <span class="tech-tag">Docker</span>
+            <span class="tech-tag">Ansible</span>
+            <span class="tech-tag">UFW</span>
+            <span class="tech-tag">Fail2Ban</span>
+            <span class="tech-tag">OpenSSH</span>
+            <span class="tech-tag">OpenSSL / TLS</span>
+          </div>
+        </div>
+        <div class="project-date">March 2026</div>
       </div>
 
       <div class="project-card reveal">
@@ -1090,27 +1217,6 @@
           </div>
         </div>
         <div class="project-date">Fall 2024</div>
-      </div>
-
-      <div class="project-card reveal">
-        <div>
-          <div class="project-meta">
-            <span class="project-title">Career Fair Analytics Dashboard</span>
-            <span class="project-type type-personal">Personal</span>
-          </div>
-          <p class="project-desc">
-            Designed a relational MySQL database and built an interactive Power BI dashboard to analyze student
-            majors, company industries, and hiring trends from simulated career fair data. Applied KPIs, calculated
-            measures, and dynamic filters for data-driven insights.
-          </p>
-          <div class="project-tech">
-            <span class="tech-tag">Power BI</span>
-            <span class="tech-tag">MySQL</span>
-            <span class="tech-tag">Data Modeling</span>
-            <span class="tech-tag">Analytics</span>
-          </div>
-        </div>
-        <div class="project-date">Summer 2025</div>
       </div>
 
     </div>
@@ -1164,7 +1270,15 @@
       </div>
 
       <div class="leadership-card reveal">
-        <div class="leadership-org">DogsToHogs</div>
+        <div class="leadership-org" style="display:flex;align-items:center;gap:0.6rem;">
+          DogsToHogs
+          <a href="https://www.instagram.com/dogstohogs/" target="_blank" rel="noopener noreferrer" title="DogsToHogs on Instagram" style="color:var(--muted);opacity:0.7;transition:opacity 0.2s;display:inline-flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61582164276027" target="_blank" rel="noopener noreferrer" title="DogsToHogs on Facebook" style="color:var(--muted);opacity:0.7;transition:opacity 0.2s;display:inline-flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+        </div>
         <div class="leadership-role">Co-Founder & Mentor</div>
         <div class="leadership-date">2022 – Present · Springdale High School Partnership</div>
         <ul class="leadership-bullets">
@@ -1230,6 +1344,15 @@
   </footer>
 
   <script>
+    // Homelab expand/collapse
+    function toggleHomelab(btn) {
+      const expanded = btn.nextElementSibling;
+      const isOpen = !expanded.hidden;
+      expanded.hidden = isOpen;
+      btn.textContent = isOpen ? 'Read full write-up ↓' : 'Collapse ↑';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    }
+
     // Hamburger menu
     const hamburger = document.querySelector('.nav-hamburger');
     const navLinks = document.querySelector('.nav-links');
