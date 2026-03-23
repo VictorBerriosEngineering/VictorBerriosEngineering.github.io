@@ -453,7 +453,7 @@
     }
 
     .project-card:hover {
-      border-color: rgba(157,34,53,0.3);
+      border-color: rgba(157,34,53,0.6);
       transform: translateX(4px);
     }
 
@@ -619,6 +619,10 @@
     .reveal.visible {
       opacity: 1;
       transform: none;
+    }
+
+    .project-card.visible:hover {
+      transform: translateX(4px);
     }
 
 /* ── LEADERSHIP ── */
@@ -809,17 +813,19 @@
     }
 
     /* ── HOMELAB FEATURED CARD ── */
-    .project-card-featured {
-      border-color: rgba(52,211,153,0.25);
-      background: linear-gradient(160deg, var(--surface) 0%, rgba(52,211,153,0.03) 100%);
-      border-top: 2px solid rgba(52,211,153,0.4);
-    }
-
     .project-card-featured::before { background: var(--green); }
 
     .project-card-featured:hover {
       border-color: rgba(52,211,153,0.45);
       transform: translateX(4px);
+    }
+
+    .project-card:has(.type-capstone)::before {
+      background: var(--accent2);
+    }
+
+    .project-card:has(.type-capstone):hover {
+      border-color: rgba(167,139,250,0.3);
     }
 
     .type-homelab {
